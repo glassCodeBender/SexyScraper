@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import string
+import time
 
 """
 This is a program I wrote to scrape a web-site for information about Windows processes.
@@ -57,6 +58,7 @@ class SexyScraper:
         urls = links
         for link in urls:
             try:
+                time.sleep(2)
                 url = "http://www.liutilities.com" + link
                 html = urlopen(url)
                 soup = BeautifulSoup(html, "lxml")
