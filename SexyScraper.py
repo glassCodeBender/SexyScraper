@@ -62,7 +62,7 @@ class SexyScraper:
         urls = links
         for link in urls:
             try:
-                time.sleep(.5)
+                # time.sleep(.5)
                 url = "http://www.liutilities.com" + link
                 html = urlopen(url)
                 soup = BeautifulSoup(html, "lxml")
