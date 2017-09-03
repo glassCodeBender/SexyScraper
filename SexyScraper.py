@@ -18,8 +18,6 @@ probably just be easier to wait until ProcessTree.scala is finished if you are l
 big list of processes.
 """
 
-class SexyScraper:
-
     def main(self):
         links = get_links()
         cleaned = clean_list(links)
