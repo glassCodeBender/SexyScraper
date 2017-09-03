@@ -18,7 +18,7 @@ probably just be easier to wait until ProcessTree.scala is finished if you are l
 big list of processes.
 """
 class SexyScraper:
-    
+
     def __init__(self):
         pass
 
@@ -65,17 +65,23 @@ class SexyScraper:
     def scrape_pages(self, links):
         the_text = []
         urls = links
+        i = 0
         for link in urls:
             try:
-                # time.sleep(.2)
+                if i % 10 == 0:
+                    time.sleep(1)
+                if i % 2 == 0:
+                    time.sleep(.1)
                 url = "http://www.liutilities.com" + link
-                html = urlopen(url)
+                html = urlopen(url).read()
                 soup = BeautifulSoup(html, "lxml")
                 result = soup.findAll("div", {"class": "right"})
             except Exception:
                 continue
             if result:
-                the_text.append(result[0].get_text)
+                check = str(result[0].get_text)
+                the_text.append(check)
+            i = i + 1
         return the_text
 
     """ Write results to a txt file. """
