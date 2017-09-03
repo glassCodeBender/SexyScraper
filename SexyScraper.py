@@ -17,6 +17,10 @@ run as is. If you want to use the program, use the program's logic in a jupyter 
 probably just be easier to wait until ProcessTree.scala is finished if you are looking for a 
 big list of processes.
 """
+class SexyScraper:
+    
+    def __init__(self):
+        pass
 
     def main(self):
         links = get_links()
@@ -37,6 +41,7 @@ big list of processes.
                 pages.append(link['href'])
         return pages
 
+    """ Remove links with blank spaces in them. They don't work. """
     def clean_list(self, links):
         unique = set(links)
         new_list = []
@@ -47,6 +52,7 @@ big list of processes.
             unique.remove(item)
         return unique
 
+    """ Remove pages that don't have the info we want. """
     def remove_extras(self, unique):
         all_letters = string.ascii_lowercase
         for letter in all_letters:
@@ -55,7 +61,8 @@ big list of processes.
                 unique.remove(url)
         return unique
 
-    def scrape_pages(links):
+    """ Get the info we want from each page we are looking through."""
+    def scrape_pages(self, links):
         the_text = []
         urls = links
         for link in urls:
@@ -71,8 +78,12 @@ big list of processes.
                 the_text.append(result[0].get_text)
         return the_text
 
+    """ Write results to a txt file. """
     def write_file(self, pages):
-        the_file = open("/Documents/scraped_results.txt", "w")
+        the_file = open("scraped_results.txt", "w")
         for line in pages:
             the_file.write(line)
         the_file.close()
+
+sexy = SexyScraper()
+sexy.main()
