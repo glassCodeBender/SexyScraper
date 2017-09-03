@@ -57,21 +57,20 @@ class SexyScraper:
                 unique.remove(url)
         return unique
 
-    def scrape_pages(self, links):
+    def scrape_pages(links):
         the_text = []
         urls = links
         for link in urls:
             try:
-                # time.sleep(.5)
+                time.sleep(.2)
                 url = "http://www.liutilities.com" + link
-                html = urlopen(url)
+                html = urlopen(url).read()
                 soup = BeautifulSoup(html, "lxml")
-                result = soup.findAll("div", {"id": "indexer"})
+                result = soup.findAll("div", {"class": "right" })
             except Exception:
                 continue
-            if result:
-                the_text.append(result[0].get_text())
-        return the_text
+            the_text.append(result[0].get_text())
+    return the_text
 
     def write_file(self, pages):
         the_file = open("/Documents/scraped_results.txt", "w")
