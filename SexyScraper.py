@@ -62,15 +62,16 @@ class SexyScraper:
         urls = links
         for link in urls:
             try:
-                time.sleep(.2)
+                # time.sleep(.2)
                 url = "http://www.liutilities.com" + link
-                html = urlopen(url).read()
+                html = urlopen(url)
                 soup = BeautifulSoup(html, "lxml")
-                result = soup.findAll("div", {"class": "right" })
+                result = soup.findAll("div", {"class": "right"})
             except Exception:
                 continue
-            the_text.append(result[0].get_text())
-    return the_text
+            if result:
+                the_text.append(result[0].get_text)
+        return the_text
 
     def write_file(self, pages):
         the_file = open("/Documents/scraped_results.txt", "w")
