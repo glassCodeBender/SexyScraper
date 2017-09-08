@@ -1,6 +1,6 @@
 import mechanize, cookielib, random
 
-class anonBrowser(mechanize.Browser):
+class AnonBrowser(mechanize.Browser):
     def __init__(self, proxies=[], user_agents=[]):
         mechanize.Browser.__init__(self)
         self.set_handle_robots(False)
