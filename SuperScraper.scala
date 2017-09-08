@@ -5,7 +5,7 @@ import sys.process._
 
 /**
   * Process Scraper. The python program uses Python 2.7 and has mechanize and urllib2 dependencies. 
-  * I'm not sure if this program will work with the new scraper. Was test before with Python 3.5.
+  * I'm not sure if this program will work with the new scraper. I tested program before with Python 3.6.
   */
 object SuperScraper {
 
