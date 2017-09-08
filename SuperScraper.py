@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from sys import argv
 
 if len(argv) == 4:
-
     script, begin_slice, end_slice, length = argv
     pages = []
     for number in range(1, int(length)):
