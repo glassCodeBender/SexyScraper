@@ -6,16 +6,15 @@ from sys import argv
 Program uses Python 2.7. Has mechanize and urllib2 dependencies. 
 """
 
-script, begin_slice, end_slice, length, output_file = argv
+script, begin_slice, end_slice, length, letter = argv
 pages = []
+browser = AnonBrowser()
+browser.anonymize()
 for number in range(1, int(length)):
     try:
-        browser = AnonBrowser()
-        browser.anonymize()
-        urlUpdate = "http://www.processlibrary.com/en/directory/a/" + str(number)
+        urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "/" + str(number)
         page = browser.open(urlUpdate)
         html = page.read()
-
         soup = BeautifulSoup(html, "lxml")
 
         for link in soup.findAll("a", href=True):
@@ -30,11 +29,12 @@ convert_list = list(unique)
 sorted_list = sorted(convert_list)
 urls = sorted_list[int(begin_slice):int(end_slice)]
 
+new_browser = AnonBrowser()
+new_browser.anonymize()
+
 for link in urls:
     try:
         url = "http://www.processlibrary.com/" + link
-        new_browser = AnonBrowser()
-        new_browser.anonymize()
         page_found = new_browser.open(url)
         next_html = page_found.read()
         next_soup = BeautifulSoup(next_html, "lxml")
@@ -51,7 +51,8 @@ for link in urls:
 
 for found in the_text:
     print found
-
+    
+"""
 try:
     the_file = open(output_file, "w")
     for line in the_text:
@@ -59,3 +60,4 @@ try:
     the_file.close()
 except IOError:
     print "Something went wrong while printing to file."
+"""    
