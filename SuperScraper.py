@@ -32,7 +32,7 @@ new_browser.anonymize()
 
 for link in sorted_list:
     try:
-        if i % 10 == 0:
+        if i % 5 == 0:
             new_browser.anonymize()
         url = "http://www.processlibrary.com/" + link
         page_found = new_browser.open(url)
