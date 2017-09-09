@@ -12,7 +12,7 @@ browser = AnonBrowser()
 browser.anonymize()
 for number in range(1, int(length)):
     try:
-        urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "/" + str(number)
+        urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "//" + str(number)
         page = browser.open(urlUpdate)
         html = page.read()
         soup = BeautifulSoup(html, "lxml")
@@ -32,7 +32,7 @@ new_browser.anonymize()
 
 for link in sorted_list:
     try:
-        if i % 5 == 0:
+        if i % 10 == 0:
             new_browser.anonymize()
         url = "http://www.processlibrary.com/" + link
         page_found = new_browser.open(url)
