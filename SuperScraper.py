@@ -8,10 +8,11 @@ Program uses Python 2.7. Has mechanize and urllib2 dependencies.
 
 script, letter, length = argv
 pages = []
-browser = AnonBrowser()
-browser.anonymize()
+
 for number in range(1, int(length)):
     try:
+        browser = AnonBrowser()
+        browser.anonymize()
         urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "//" + str(number)
         page = browser.open(urlUpdate)
         html = page.read()
@@ -27,13 +28,11 @@ i = 0
 unique = set(pages)
 convert_list = list(unique)
 sorted_list = sorted(convert_list)
-new_browser = AnonBrowser()
-new_browser.anonymize()
 
 for link in sorted_list:
     try:
-        if i % 10 == 0:
-            new_browser.anonymize()
+        new_browser = AnonBrowser()
+        new_browser.anonymize()
         url = "http://www.processlibrary.com/" + link
         page_found = new_browser.open(url)
         next_html = page_found.read()
