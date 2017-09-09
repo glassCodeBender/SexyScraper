@@ -122,7 +122,7 @@ object SuperScraper {
   } // END fixProcesses()
 
   def readResults(result: String): Vector[String] = {
-    Source.fromFile(result)
+    Source.fromString(result)
       .getLines
       .flatMap(x => x.split("\\n"))
       .filterNot(x => x.contains("Non-system processes like"))
