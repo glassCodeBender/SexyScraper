@@ -4,40 +4,40 @@ import scala.util.control.Breaks.{break, breakable}
 import sys.process._
 
 /**
-  * Process Scraper. The python program uses Python 2.7 and has mechanize and urllib2 dependencies. 
+  * Process Scraper. The python program uses Python 2.7 and has mechanize and urllib2 dependencies.
   * I'm not sure if this program will work with the new scraper. I tested program before with Python 3.6.
   */
 object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
-
+ 
     val letterMap = Map(
-    "a" -> 113,
-    "b" -> 37,
-    "c" -> 131,
-    "d" -> 85,
-    "e" -> 51,
-    "f" -> 48,
-    "g" -> 33,
-    "h" -> 48,
-    "i" -> 73,
-    "j" -> 16,
-    "k" -> 22,
-    "l" -> 74,
-    "m" -> 115,
-    "n" -> 57,
-    "o" -> 30,
-    "p" -> 94,
-    "q" -> 13,
-    "r" -> 53,
-    "s" -> 153,
-    "t" -> 57,
-    "u" -> 26,
-    "v" -> 46,
-    "w" -> 66,
-    "x" -> 18,
-    "y" -> 5,
-    "z" -> 8
+      "a" -> 113,
+      "b" -> 37,
+      "c" -> 131,
+      "d" -> 85,
+      "e" -> 51,
+      "f" -> 48,
+      "g" -> 33,
+      "h" -> 48,
+      "i" -> 73,
+      "j" -> 16,
+      "k" -> 22,
+      "l" -> 74,
+      "m" -> 115,
+      "n" -> 57,
+      "o" -> 30,
+      "p" -> 94,
+      "q" -> 13,
+      "r" -> 53,
+      "s" -> 153,
+      "t" -> 57,
+      "u" -> 26,
+      "v" -> 46,
+      "w" -> 66,
+      "x" -> 18,
+      "y" -> 5,
+      "z" -> 8
     )
 
     for((letter, upperBound) <- letterMap){
@@ -45,7 +45,11 @@ object SuperScraper {
       val soup = makeSoup(letter, upperBound)
       soup.foreach(println)
     }
-
+/*
+    val test = makeSoup("z", 8)
+    test.foreach(println)
+    val test2 = makeSoup("y", 5)
+    test2.foreach(println) */
   } // END main()
 
   def run(result: String): ArrayBuffer[String] = {
@@ -120,6 +124,7 @@ object SuperScraper {
   def readResults(result: String): Vector[String] = {
     Source.fromFile(result)
       .getLines
+      .flatMap(x => x.split("\\n"))
       .filterNot(x => x.contains("Non-system processes like"))
       .map(_.trim)
       .map(x => x.replaceAll("<br/>", ""))
