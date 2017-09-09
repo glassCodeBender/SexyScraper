@@ -13,7 +13,7 @@ for number in range(1, int(length)):
     try:
         browser = AnonBrowser()
         browser.anonymize()
-        urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "//" + str(number)
+        urlUpdate = "http://www.processlibrary.com/en/directory/" + letter + "/" + str(number)
         page = browser.open(urlUpdate)
         html = page.read()
         soup = BeautifulSoup(html, "lxml")
