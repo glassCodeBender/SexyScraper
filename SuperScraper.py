@@ -6,7 +6,7 @@ from sys import argv
 Program uses Python 2.7. Has mechanize and urllib2 dependencies. 
 """
 
-script, letter, length = argv
+script, letter, length, file_name = argv
 pages = []
 
 for number in range(1, int(length)):
@@ -26,10 +26,8 @@ for number in range(1, int(length)):
 the_text = []
 i = 0
 unique = set(pages)
-convert_list = list(unique)
-sorted_list = sorted(convert_list)
 
-for link in sorted_list:
+for link in unique:
     try:
         new_browser = AnonBrowser()
         new_browser.anonymize()
@@ -47,16 +45,15 @@ for link in sorted_list:
         the_text.append(check)
 
     i = i + 1
-
+"""
 for found in the_text:
     print found
 
 """
 try:
-    the_file = open(output_file, "w")
+    the_file = open(file_name, "w")
     for line in the_text:
         the_file.write(line)
     the_file.close()
 except IOError:
     print "Something went wrong while printing to file."
-"""
