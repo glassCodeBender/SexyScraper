@@ -10,14 +10,18 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "/Users/thinkingaboutthesexiestwomanever/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
+    val fileName = "/Users/xan0/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
 
     val firstClean = readResults(fileName)
-    val secondClean = cleanUp(firstClean)
-    val fullClean = fixProcesses(secondClean)
-    val fixed = finalClean(fullClean)
 
-    fixed.foreach(println)
+    val secondClean = cleanUp(firstClean)
+
+    val fullClean = fixProcesses(secondClean)
+
+    val fixed = finalClean(fullClean)
+    val superClean = extraClean(fixed)
+
+    superClean.foreach(println)
   } // END main()
 
   def finalClean(grabbed: ArrayBuffer[String]): ArrayBuffer[String] = {
@@ -35,17 +39,25 @@ object SuperScraper {
         .flatMap(x => x.split("      "))
         .flatMap(x => x.split("       "))
         .flatMap(x => x.split("     "))
-      .map(x => x.replaceAll("<bound method Tag.get_text of <div class=\"six columns\"> ", ""))
-      .map(x => x.replaceAll("> </div> >", ""))
-        .map(x => x.replaceAll("</div>", ""))
-      .map(x => x.replaceAll("\\n", ""))
-        .map(x => x.replaceAll(">", ""))
-        .map(x => x.replaceAll("This program is a non-essential process, and is installed for ease of use and can be safely removed.", ""))
       .map(x => x.trim)
+
 
     return splitUp
 
-  } // END run()
+  } // END splitUp()
+
+  def extraClean(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+    buff.map(x => x.replaceAll("<bound method Tag.get_text of <div class=\"six columns\"> ", ""))
+      .map(x => x.replaceAll("> </div> >", ""))
+      .map(x => x.replaceAll("</div>", ""))
+      .map(x => x.replaceAll("\\n", ""))
+      .map(x => x.replaceAll(">", ""))
+      .map(x => x.replaceAll("\"If you have any information with more details, please e-mail us with the details at PL@uniblue.net. \"", ""))
+      .map(x => x.replaceAll("This program is a non-essential process, and is installed for ease of use and can be safely removed.", ""))
+      .map(x => x.replaceAll(" This program is important for the stable and secure running of your computer and should not be terminated.", ""))
+      .map(x => x.replaceAll(" Please see additional details regarding this process.", ""))
+      .map(x => x.trim)
+  }
 /*
   @deprecated
   def makeSoup(letter: String, length: String): ArrayBuffer[String] = {
