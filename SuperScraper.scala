@@ -13,11 +13,8 @@ object SuperScraper {
     val fileName = "/Users/thinkingaboutthesexiestwomanever/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
 
     val firstClean = readResults(fileName)
-    println("firstClean ok")
     val secondClean = cleanUp(firstClean)
-    println("secondClean ok")
     val fullClean = fixProcesses(secondClean)
-    println("fullClean ok")
     val fixed = finalClean(fullClean)
 
     fixed.foreach(println)
