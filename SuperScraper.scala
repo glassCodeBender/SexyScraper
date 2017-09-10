@@ -27,7 +27,7 @@ object SuperScraper {
       .filterNot(x => x.contains("This process is still being reviewed"))
         .filterNot(x => x.contains("\"This program is a non-essential process, but should not be terminated unless suspected to be causing problems. \""))
         .filterNot(x => x.contains("<form action="))
-      .filterNot(x => x.contains("<product name=\"\" from TODO: <company name=\""))
+      .filterNot(x => x.contains("TODO"))
         .filterNot(x => x.contains("N/A"))
       .map(x => x.replaceAll("<div class=\"WordSection1\">", ""))
       .flatMap(x => x.split("          "))
