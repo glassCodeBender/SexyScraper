@@ -1,7 +1,6 @@
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.control.Breaks.{break, breakable}
-import sys.process._
 
 /**
   * Process Scraper. The python program uses Python 2.7 and has mechanize and urllib2 dependencies.
@@ -10,53 +9,22 @@ import sys.process._
 object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
- 
-    val letterMap = Map(
-      "a" -> 113,
-      "b" -> 37,
-      "c" -> 131,
-      "d" -> 85,
-      "e" -> 51,
-      "f" -> 48,
-      "g" -> 33,
-      "h" -> 48,
-      "i" -> 73,
-      "j" -> 16,
-      "k" -> 22,
-      "l" -> 74,
-      "m" -> 115,
-      "n" -> 57,
-      "o" -> 30,
-      "p" -> 94,
-      "q" -> 13,
-      "r" -> 53,
-      "s" -> 153,
-      "t" -> 57,
-      "u" -> 26,
-      "v" -> 46,
-      "w" -> 66,
-      "x" -> 18,
-      "y" -> 5,
-      "z" -> 8
-    )
 
-    for((letter, upperBound) <- letterMap){
+    val fileName = "/Users/xan0/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
 
-      val soup = makeSoup(letter, upperBound)
-      soup.foreach(println)
-    }
-/*
-    val test = makeSoup("z", 8)
-    test.foreach(println)
-    val test2 = makeSoup("y", 5)
-    test2.foreach(println) */
+    val firstClean = readResults(fileName)
+    println("firstClean ok")
+    val secondClean = cleanUp(firstClean)
+    println("secondClean ok")
+    val fullClean = fixProcesses(secondClean)
+    println("fullClean ok")
+    val fixed = finalClean(fullClean)
+
+    fixed.foreach(println)
   } // END main()
 
-  def run(result: String): ArrayBuffer[String] = {
+  def finalClean(grabbed: ArrayBuffer[String]): ArrayBuffer[String] = {
 
-    val fileName = result
-
-    val grabbed = fixProcesses(result)
     val splitUp = grabbed.flatMap(x => x.split("           "))
       .map(x => x.trim)
       .filterNot(x => x.contains("This process is still being reviewed"))
@@ -71,29 +39,29 @@ object SuperScraper {
     return splitUp
 
   } // END run()
-
-  def makeSoup(letter: String, length: Int): ArrayBuffer[String] = {
-    val len = length.toString()
-    val soupWork: Option[String] = Some( s"python SuperScraper.py $letter $len".!!.trim )
-    val scrapedStuff = run(soupWork.getOrElse(""))
+/*
+  @deprecated
+  def makeSoup(letter: String, length: String): ArrayBuffer[String] = {
+    val soupWork: Option[String] = Some( s"python SuperScraper.py $letter $length".!!.trim )
+    val scrapedStuff = finalClean(soupWork.getOrElse(""))
 
     return scrapedStuff
   } // END run()
 
+  @deprecated
   def makeBuffer(files: Vector[String]): ArrayBuffer[String] = {
     var buffer = ArrayBuffer[String]()
     var i = 0
     while(i < files.size){
-      val fixed = fixProcesses( files(i) )
+      val fixed = fixProcesses( files )
       buffer ++: fixed
       i = i + 1
     }
 
     return buffer
   } // END makeBuffer()
-
-  def fixProcesses(fileName: String): ArrayBuffer[String] = {
-    val read1 = readResults(fileName)
+*/
+  def fixProcesses(read1: Vector[String]): ArrayBuffer[String] = {
 
     var buffer = ArrayBuffer[String]()
     var boundCount: Int = 0
@@ -121,16 +89,25 @@ object SuperScraper {
     return buffer
   } // END fixProcesses()
 
-  def readResults(result: String): Vector[String] = {
-    Source.fromString(result)
-      .getLines
-      .flatMap(x => x.split("\\n"))
+  def readResults(fileName: String): Vector[String] = {
+    val read = Source.fromFile(fileName).mkString
+    val reg = """\\r""".r
+    val reg2 = """\\n""".r
+    val reg3 = """\\t""".r
+    val check = reg.split(read)
+    val extraCheck = check.flatMap(x => reg2.split(x)).toVector
+    val superCheck = extraCheck.map(x => reg3.replaceAllIn(x, ""))
+
+    return superCheck
+  } // readFile()
+
+  def cleanUp(vec: Vector[String]): Vector[String] = {
+    vec.map(x => x.replaceAll("<br/>", ""))
       .filterNot(x => x.contains("Non-system processes like"))
-      .map(_.trim)
-      .map(x => x.replaceAll("<br/>", ""))
       .map(x => x.replaceAll("<p>", ""))
       .map(x => x.replaceAll("</p", ""))
-      .toVector
-  } // readFile()
+      .map(x => x.replaceAll("\\t", ""))
+      .map(_.trim)
+  }
 
 } // END Object
