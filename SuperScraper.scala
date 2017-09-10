@@ -10,14 +10,11 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "/Users/xan0/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
+    val fileName = "/Users/tired_of_waiting/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
 
     val firstClean = readResults(fileName)
-
     val secondClean = cleanUp(firstClean)
-
     val fullClean = fixProcesses(secondClean)
-
     val fixed = finalClean(fullClean)
     val superClean = extraClean(fixed)
 
@@ -113,11 +110,13 @@ object SuperScraper {
     val reg = """\\r""".r
     val reg2 = """\\n""".r
     val reg3 = """\\t""".r
+    val reg4 = """////////////////""".r
     val check = reg.split(read)
     val extraCheck = check.flatMap(x => reg2.split(x)).toVector
     val superCheck = extraCheck.map(x => reg3.replaceAllIn(x, ""))
+    val superDuperCheck = superCheck.map(x => reg4.replaceAllIn(x, "//"))
 
-    return superCheck
+    return superDuperCheck
   } // readFile()
 
   def cleanUp(vec: Vector[String]): Vector[String] = {
