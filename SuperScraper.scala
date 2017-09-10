@@ -10,7 +10,7 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "/Users/xan0/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
+    val fileName = "/Users/thinkingaboutthesexiestwomanever/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
 
     val firstClean = readResults(fileName)
     println("firstClean ok")
@@ -28,12 +28,22 @@ object SuperScraper {
     val splitUp = grabbed.flatMap(x => x.split("           "))
       .map(x => x.trim)
       .filterNot(x => x.contains("This process is still being reviewed"))
+        .filterNot(x => x.contains("\"This program is a non-essential process, but should not be terminated unless suspected to be causing problems. \""))
+        .filterNot(x => x.contains("<form action="))
+      .filterNot(x => x.contains("<product name=\"\" from TODO: <company name=\""))
+        .filterNot(x => x.contains("N/A"))
       .map(x => x.replaceAll("<div class=\"WordSection1\">", ""))
       .flatMap(x => x.split("          "))
       .flatMap(x => x.split("         "))
+        .flatMap(x => x.split("      "))
+        .flatMap(x => x.split("       "))
+        .flatMap(x => x.split("     "))
       .map(x => x.replaceAll("<bound method Tag.get_text of <div class=\"six columns\"> ", ""))
       .map(x => x.replaceAll("> </div> >", ""))
+        .map(x => x.replaceAll("</div>", ""))
       .map(x => x.replaceAll("\\n", ""))
+        .map(x => x.replaceAll(">", ""))
+        .map(x => x.replaceAll("This program is a non-essential process, and is installed for ease of use and can be safely removed.", ""))
       .map(x => x.trim)
 
     return splitUp
