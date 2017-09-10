@@ -7,7 +7,7 @@ SuperScraper.py uses Python 2.7 and has mechanize, BeautifulSoup4 and urllib2 de
 
 Arguments: 
 (1) Letter that the process or DLL begins with.
-(2) The amount of pages that the web-site contains. 
+(2) The amount of pages that the section of the web-site contains. 
 
 Example Usage:
 $ python SuperScraper.py a 113
