@@ -6,7 +6,7 @@ from sys import argv
 Program uses Python 2.7. Has mechanize and urllib2 dependencies. 
 """
 
-script, letter, length, file_name = argv
+script, letter, length = argv
 pages = []
 
 for number in range(1, int(length)):
@@ -51,6 +51,7 @@ for found in the_text:
 
 """
 try:
+    file_name = letter + "_processes.txt"
     the_file = open(file_name, "w")
     for line in the_text:
         the_file.write(line)
