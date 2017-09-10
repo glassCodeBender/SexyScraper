@@ -18,4 +18,4 @@ SexyScraper.py uses Python 3.6 and is a variation of a script I wrote to scrape 
 
 SuperScraper.scala
 
-Program used to clean data retrieved from SuperScraper.scala
+Program used to clean data retrieved from SuperScraper.py
