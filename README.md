@@ -3,7 +3,7 @@ I'm going to store any web-scraping scripts I write here.
 
 SuperScraper.py
 
-SuperScraper.py uses Python 2.7 and has mechanize, BeautifulSoup4 and urllib2 dependencies. It is a web-scraper that I'm using to create a giant list of known DLLs, processes, and descriptions of the programs that use them. Because the web-site is huge, the program creates an anonymous browser that erases cookies, changes useragent, and changes IP address.
+SuperScraper.py uses Python 2.7 and has mechanize, BeautifulSoup4 and urllib2 dependencies. It is a web-scraper that I'm using to create a giant list of known DLLs, processes, and descriptions of the programs that use them. Because the web-site is huge, the program creates an anonymous browser that erases cookies, changes useragent, and changes IP address. Before using the anonymous browser, the web-site blocked my IP address. 
 
 Arguments: 
 (1) Letter that the program begins with.
