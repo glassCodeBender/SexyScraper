@@ -11,7 +11,7 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "//Users//so_tired_GRRR//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
+    val fileName = "//Users//talk//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
 
     val firstClean = readResults(fileName)
 
@@ -27,11 +27,11 @@ object SuperScraper {
     val fixConverted = fixFinalOutput(converted)
     val finalFix = fixList(fixConverted)
 
-     toPrint.foreach(println)
+     finalFix.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
-    val regex = "^(\\S|\\s)+\\.(EXE|exe|dll|DLL)\\s".r
+    val regex = "^(\\S|\\s)+\\.(EXE|exe|dll|DLL)\\Z".r
     val process = buff.map(x => regex.findFirstIn(x).getOrElse(""))
 
     return process
