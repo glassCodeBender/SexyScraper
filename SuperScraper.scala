@@ -25,16 +25,26 @@ object SuperScraper {
     val noHref = removeHref(superClean)
     val converted = convertIt(noHref)
     val fixConverted = fixFinalOutput(converted)
+    val finalFix = fixList(fixConverted)
 
-    fixConverted.foreach(println)
+    finalFix.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
-    val regex = "^(\\S|\\s)+\\.\\w{3}\\s".r
+    val regex = "^(\\S|\\s)+\\.(EXE|exe|dll|DLL)\\s".r
     val process = buff.map(x => regex.findFirstIn(x).getOrElse(""))
 
     return process
   } // grabProcess()
+
+  def fixList(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+   val regex = "^(\\w|\\d|\\.|[~+])+\\.(EXE|exe|dll|DLL)\\sIS\\sA\\s".r
+    val regex2 = "^\"(\\w|\\d|\\.|[~+])+\\.(EXE|exe|dll|DLL)".r
+
+   val replaced =  buff.map(x => regex.replaceAllIn(x, "\""))
+
+    return replaced
+  }
 
   def fixFinalOutput(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
     val regex = "^\"THE\\sFILE\\s".r
@@ -51,7 +61,7 @@ object SuperScraper {
     var mapped = mutable.Map[String, String]()
 
     var i = 0
-    val executable = "^(\\S|\\s)+\\.\\w{3}\\s".r
+    val executable = "^(\\S|\\s)+\\.(EXE|exe|DLL|dll)\\s".r
 
     for(value <- buff){
       val check = executable.findFirstIn(value).getOrElse("")
@@ -61,6 +71,8 @@ object SuperScraper {
 
     // var newMapped = mutable.Map[String, String]()
 
+    var newBuff = ArrayBuffer[String]()
+
     for((key, value) <- mapped){
       val regex = executable.findFirstIn(value).getOrElse("")
       val change = {
@@ -69,10 +81,10 @@ object SuperScraper {
       val changeReg = change.r
       val fixed = changeReg.replaceAllIn(value, "process")
 
-      buff += "\"" + key + "\"" + " -> " + "\"" + fixed.trim + "\"" + ","
+      newBuff += "\"" + key + "\"" + " -> " + "\"" + fixed.trim + "\"" + ","
     } // END for loop
 
-    val sortedBuff = buff.sorted
+    val sortedBuff = newBuff.sorted
 
     return sortedBuff
   } // END convertIt()
@@ -89,10 +101,10 @@ object SuperScraper {
     val splitUp = grabbed.flatMap(x => x.split("           "))
       .map(x => x.trim)
       .filterNot(x => x.contains("This process is still being reviewed"))
-        .filterNot(x => x.contains("\"This program is a non-essential process, but should not be terminated unless suspected to be causing problems. \""))
-        .filterNot(x => x.contains("<form action="))
+      .filterNot(x => x.contains("\"This program is a non-essential process, but should not be terminated unless suspected to be causing problems. \""))
+      .filterNot(x => x.contains("<form action="))
       .filterNot(x => x.contains("TODO"))
-        .filterNot(x => x.contains("N/A"))
+      .filterNot(x => x.contains("N/A"))
       .map(_.trim)
 
     return splitUp
@@ -123,28 +135,28 @@ object SuperScraper {
       .map(x => x.replaceAll("This program is a system service, and should not be terminated unless suspected to be causing problems.", ""))
       .map(x => x.trim)
   }
-/*
-  @deprecated
-  def makeSoup(letter: String, length: String): ArrayBuffer[String] = {
-    val soupWork: Option[String] = Some( s"python SuperScraper.py $letter $length".!!.trim )
-    val scrapedStuff = finalClean(soupWork.getOrElse(""))
+  /*
+    @deprecated
+    def makeSoup(letter: String, length: String): ArrayBuffer[String] = {
+      val soupWork: Option[String] = Some( s"python SuperScraper.py $letter $length".!!.trim )
+      val scrapedStuff = finalClean(soupWork.getOrElse(""))
 
-    return scrapedStuff
-  } // END run()
+      return scrapedStuff
+    } // END run()
 
-  @deprecated
-  def makeBuffer(files: Vector[String]): ArrayBuffer[String] = {
-    var buffer = ArrayBuffer[String]()
-    var i = 0
-    while(i < files.size){
-      val fixed = fixProcesses( files )
-      buffer ++: fixed
-      i = i + 1
-    }
+    @deprecated
+    def makeBuffer(files: Vector[String]): ArrayBuffer[String] = {
+      var buffer = ArrayBuffer[String]()
+      var i = 0
+      while(i < files.size){
+        val fixed = fixProcesses( files )
+        buffer ++: fixed
+        i = i + 1
+      }
 
-    return buffer
-  } // END makeBuffer()
-*/
+      return buffer
+    } // END makeBuffer()
+  */
   def fixProcesses(read1: Vector[String]): ArrayBuffer[String] = {
 
     var buffer = ArrayBuffer[String]()
