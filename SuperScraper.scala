@@ -27,7 +27,7 @@ object SuperScraper {
     val fixConverted = fixFinalOutput(converted)
     val finalFix = fixList(fixConverted)
 
-    finalFix.foreach(println)
+     toPrint.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
@@ -41,7 +41,7 @@ object SuperScraper {
    val regex = "^\"\\S+\\.(EXE|exe|dll|DLL)\\sIS\\sA\\s".r
     val regex2 = "^\"(\\w|\\d|\\.|[~+])+\\.(EXE|exe|dll|DLL)".r
 
-   val replaced =  buff.map(x => regex.replaceAllIn(x, "\""))
+   val replaced =  buff.map(x => regex.replaceAllIn(x, "\"")).map(x => x.replaceAll("CALLED ", ""))
 
     return replaced
   }
@@ -92,8 +92,10 @@ object SuperScraper {
   def removeHref(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
     val regex =  "<a href=\"http://www.uniblue.com/(\\S|\\s)$".r
     val result = buff.map( x => regex.replaceAllIn(x, "") )
+    val regex2 = "<a href=\"http://www.uniblue.com/.</a\\.$".r
+    val result2 = result.map(x => regex2.replaceAllIn(x, ""))
 
-    return result.map(_.trim)
+    return result2.map(_.trim)
   }
 
   def finalClean(grabbed: ArrayBuffer[String]): ArrayBuffer[String] = {
