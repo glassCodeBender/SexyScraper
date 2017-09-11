@@ -11,7 +11,7 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "//Users//xan0//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
+    val fileName = "//Users//so_tired_GRRR//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
 
     val firstClean = readResults(fileName)
 
@@ -27,7 +27,7 @@ object SuperScraper {
     val fixConverted = fixFinalOutput(converted)
     val finalFix = fixList(fixConverted)
 
-     finalFix.foreach(println)
+     toPrint.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
