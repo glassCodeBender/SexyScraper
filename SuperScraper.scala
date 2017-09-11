@@ -11,7 +11,7 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "//Users//super_in_like_with_her//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
+    val fileName = "//Users//xan0//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
 
     val firstClean = readResults(fileName)
 
@@ -24,8 +24,9 @@ object SuperScraper {
     val superClean: ArrayBuffer[String] = extraClean(fixed)
     val noHref = removeHref(superClean)
     val converted = convertIt(noHref)
+    val fixConverted = fixFinalOutput(converted)
 
-    converted.foreach(println)
+    fixConverted.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
@@ -34,6 +35,15 @@ object SuperScraper {
 
     return process
   } // grabProcess()
+
+  def fixFinalOutput(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+    val regex = "^\"THE\\sFILE\\s".r
+    val regex2 = "^\"THE\\sFILE\\sCALLED\\s".r
+    val fixed = buff.map(x => regex.replaceAllIn(x, "\""))
+    val fixed2 = fixed.map(x => regex2.replaceAllIn(x, "\""))
+
+    return fixed2
+  } // END fixFinalOutput()
 
   def convertIt(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
 
@@ -45,7 +55,7 @@ object SuperScraper {
 
     for(value <- buff){
       val check = executable.findFirstIn(value).getOrElse("")
-      mapped += (check.toUpperCase -> value)
+      mapped += (check.trim.toUpperCase -> value)
       i = i + 1
     }
 
