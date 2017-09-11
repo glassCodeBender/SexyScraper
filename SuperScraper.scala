@@ -27,7 +27,7 @@ object SuperScraper {
     val fixConverted = fixFinalOutput(converted)
     val finalFix = fixList(fixConverted)
 
-     toPrint.foreach(println)
+     finalFix.foreach(println)
   } // END main()
 
   def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
