@@ -1,3 +1,4 @@
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 import scala.util.control.Breaks.{break, breakable}
@@ -10,16 +11,68 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "/Users/tired_of_waiting/PycharmProjects/WebScraper/ScrapedProcesses/" + args(0)
+    val fileName = "//Users//super_in_like_with_her//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
 
     val firstClean = readResults(fileName)
-    val secondClean = cleanUp(firstClean)
-    val fullClean = fixProcesses(secondClean)
-    val fixed = finalClean(fullClean)
-    val superClean = extraClean(fixed)
 
-    superClean.foreach(println)
+    val secondClean = cleanUp(firstClean)
+
+    val fullClean = fixProcesses(secondClean)
+
+    val fixed1 = finalClean(fullClean)
+    val fixed = lastFix(fixed1)
+    val superClean: ArrayBuffer[String] = extraClean(fixed)
+    val noHref = removeHref(superClean)
+    val converted = convertIt(noHref)
+
+    converted.foreach(println)
   } // END main()
+
+  def grabProcess(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+    val regex = "^(\\S|\\s)+\\.\\w{3}\\s".r
+    val process = buff.map(x => regex.findFirstIn(x).getOrElse(""))
+
+    return process
+  } // grabProcess()
+
+  def convertIt(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+
+
+    var mapped = mutable.Map[String, String]()
+
+    var i = 0
+    val executable = "^(\\S|\\s)+\\.\\w{3}\\s".r
+
+    for(value <- buff){
+      val check = executable.findFirstIn(value).getOrElse("")
+      mapped += (check.toUpperCase -> value)
+      i = i + 1
+    }
+
+    // var newMapped = mutable.Map[String, String]()
+
+    for((key, value) <- mapped){
+      val regex = executable.findFirstIn(value).getOrElse("")
+      val change = {
+        "(?<=" + regex + "is\\s(a|an)\\s" + ")" + regex + "(?=\\sfrom)"
+      }
+      val changeReg = change.r
+      val fixed = changeReg.replaceAllIn(value, "process")
+
+      buff += "\"" + key + "\"" + " -> " + "\"" + fixed.trim + "\"" + ","
+    } // END for loop
+
+    val sortedBuff = buff.sorted
+
+    return sortedBuff
+  } // END convertIt()
+
+  def removeHref(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+    val regex =  "<a href=\"http://www.uniblue.com/(\\S|\\s)$".r
+    val result = buff.map( x => regex.replaceAllIn(x, "") )
+
+    return result.map(_.trim)
+  }
 
   def finalClean(grabbed: ArrayBuffer[String]): ArrayBuffer[String] = {
 
@@ -30,18 +83,22 @@ object SuperScraper {
         .filterNot(x => x.contains("<form action="))
       .filterNot(x => x.contains("TODO"))
         .filterNot(x => x.contains("N/A"))
-      .map(x => x.replaceAll("<div class=\"WordSection1\">", ""))
-      .flatMap(x => x.split("          "))
-      .flatMap(x => x.split("         "))
-        .flatMap(x => x.split("      "))
-        .flatMap(x => x.split("       "))
-        .flatMap(x => x.split("     "))
-      .map(x => x.trim)
-
+      .map(_.trim)
 
     return splitUp
 
-  } // END splitUp()
+  } // END finalClean()
+
+  def lastFix(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
+    buff.map(x => x.replaceAll("<div class=\"WordSection1\">", ""))
+      .flatMap(x => x.split("          "))
+      .flatMap(x => x.split("         "))
+      .flatMap(x => x.split("      "))
+      .flatMap(x => x.split("       "))
+      .flatMap(x => x.split("     "))
+      .map(x => x.trim)
+  }
+
 
   def extraClean(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
     buff.map(x => x.replaceAll("<bound method Tag.get_text of <div class=\"six columns\"> ", ""))
@@ -53,6 +110,7 @@ object SuperScraper {
       .map(x => x.replaceAll("This program is a non-essential process, and is installed for ease of use and can be safely removed.", ""))
       .map(x => x.replaceAll(" This program is important for the stable and secure running of your computer and should not be terminated.", ""))
       .map(x => x.replaceAll(" Please see additional details regarding this process.", ""))
+      .map(x => x.replaceAll("This program is a system service, and should not be terminated unless suspected to be causing problems.", ""))
       .map(x => x.trim)
   }
 /*
