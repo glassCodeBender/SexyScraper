@@ -38,7 +38,7 @@ object SuperScraper {
   } // grabProcess()
 
   def fixList(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
-   val regex = "^(\\w|\\d|\\.|[~+])+\\.(EXE|exe|dll|DLL)\\sIS\\sA\\s".r
+   val regex = "^\"\\S+\\.(EXE|exe|dll|DLL)\\sIS\\sA\\s".r
     val regex2 = "^\"(\\w|\\d|\\.|[~+])+\\.(EXE|exe|dll|DLL)".r
 
    val replaced =  buff.map(x => regex.replaceAllIn(x, "\""))
