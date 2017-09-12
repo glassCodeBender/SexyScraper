@@ -11,7 +11,7 @@ object SuperScraper {
 
   def main( args: Array[String] ): Unit = {
 
-    val fileName = "//Users//talk//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
+    val fileName = "//Users//xan0//PycharmProjects//WebScraper//ScrapedProcesses//" + args(0)
 
     val firstClean = readResults(fileName)
 
@@ -60,13 +60,12 @@ object SuperScraper {
 
     var mapped = mutable.Map[String, String]()
 
-    var i = 0
     val executable = "^(\\S|\\s)+\\.(EXE|exe|DLL|dll)\\s".r
 
     for(value <- buff){
       val check = executable.findFirstIn(value).getOrElse("")
       mapped += (check.trim.toUpperCase -> value)
-      i = i + 1
+
     }
 
     // var newMapped = mutable.Map[String, String]()
@@ -74,14 +73,17 @@ object SuperScraper {
     var newBuff = ArrayBuffer[String]()
 
     for((key, value) <- mapped){
-      val regex = executable.findFirstIn(value).getOrElse("")
+     /* val regex = executable.findFirstIn(value).getOrElse("")
       val change = {
         "(?<=" + regex + "is\\s(a|an)\\s" + ")" + regex + "(?=\\sfrom)"
       }
       val changeReg = change.r
-      val fixed = changeReg.replaceAllIn(value, "process")
+      val fixed = changeReg.replaceAllIn(value, "process")*/
+      val description = value.replaceAll("\"", "")
+      val newKey = key.replaceAll("\"", "")
 
-      newBuff += "\"" + key + "\"" + " -> " + "\"" + fixed.trim + "\"" + ","
+      newBuff += "\"" + newKey.trim + "\"" + " -> " + "\"" +  description.trim + "\"" + ","
+
     } // END for loop
 
     val sortedBuff = newBuff.sorted
@@ -90,12 +92,23 @@ object SuperScraper {
   } // END convertIt()
 
   def removeHref(buff: ArrayBuffer[String]): ArrayBuffer[String] = {
-    val regex =  "<a href=\"http://www.uniblue.com/(\\S|\\s)$".r
+    val regex =  "<a\\shref=http://www.uniblue.com/(\\S|\\s)+,$".r
     val result = buff.map( x => regex.replaceAllIn(x, "") )
-    val regex2 = "<a href=\"http://www.uniblue.com/.</a\\.$".r
+    val regex2 = "<a href=http(\\S|\\s)+$".r
     val result2 = result.map(x => regex2.replaceAllIn(x, ""))
+    val regex3 = "(//|\\s){2,}".r
+    val result3 = result2.map(x => regex3.replaceAllIn(x, "//"))
+    val regex4 = "<img(\\s|\\S)+".r
+    val result4 = result3.map(x => regex4.replaceAllIn(x, ""))
+    val regex5 = "(t|T|)he main process is <a(\\s|\\S)+$".r
+    val result5 = result4.map(x => regex5.replaceAllIn(x, ""))
+    val regex6 = "ATI\\sTECHNOLOGIES\\sUSE\\s([A-Z]|\\d)+\\sTO\\sOPERATE\\sTHEIR\\sGRAPHICS\\sDEVICES.\\sTHE\\sFILE\\s".r
+    val oneMore = result5.map(x => regex6.replaceAllIn(x, ""))
+    val finalResult = oneMore.map(x => x.replaceAll("&AMP", "and"))
 
-    return result2.map(_.trim)
+
+   // "<a href=http://www.uniblue.com//"
+    return finalResult.map(_.trim)
   }
 
   def finalClean(grabbed: ArrayBuffer[String]): ArrayBuffer[String] = {
