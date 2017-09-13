@@ -4,8 +4,12 @@ import scala.io.Source
 import scala.util.control.Breaks.{break, breakable}
 
 /**
-  * Process Scraper. The python program uses Python 2.7 and has mechanize and urllib2 dependencies.
-  * I'm not sure if this program will work with the new scraper. I tested program before with Python 3.6.
+  * Scraped data cleaner.
+  * I didn't end up using this logic. I got tired of reposting code so I used the REPL and VIM for the extra cleaning.
+  * This program only works with some of the scraped data. Some of the data will cause a buffer overflow.
+  * I recommend removing some of the unecessary transformations.
+  *
+  * This program also doesn't remove duplicates. The logic for that is a secret. ;)
   */
 object SuperScraper {
 
