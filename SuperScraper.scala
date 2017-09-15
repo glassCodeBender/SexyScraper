@@ -5,6 +5,7 @@ import scala.util.control.Breaks.{break, breakable}
 
 /**
   * I'm pretty sure I ran the scraper with Python 3 on accident so I had to do some crazy coding to parse the data. 
+  * Also, I should have used a stack instead of an ArrayBuffer since the data structure was pretty big.
   * 
   * Scraped data cleaner.
   * I didn't end up using this logic. I got tired of reposting code so I used the REPL and VIM for the extra cleaning.
