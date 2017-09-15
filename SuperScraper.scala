@@ -4,6 +4,8 @@ import scala.io.Source
 import scala.util.control.Breaks.{break, breakable}
 
 /**
+  * I'm pretty sure I ran the scraper with Python 3 on accident so I had to do some crazy coding to parse the data. 
+  * 
   * Scraped data cleaner.
   * I didn't end up using this logic. I got tired of reposting code so I used the REPL and VIM for the extra cleaning.
   * This program only works with some of the scraped data. Some of the data will cause a buffer overflow.
